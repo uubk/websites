@@ -1,0 +1,13 @@
+websites: []
+#  - name: testsite
+#    webroot: /var/www/testsite
+#    files_to_deploy:
+#      - src: index.php
+#        dest: index.php
+#    nginx_base: base
+#    nginx_dropin: testsite
+
+websites_owner: www-data
+websites_group: www-data
+websites_default_mode: "0750"
+websites_default_file_mode: "0640"

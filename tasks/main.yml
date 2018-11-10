@@ -1,0 +1,34 @@
+---
+  - name: Create website base path
+    become: True
+    with_items: "{{ websites }}"
+    file:
+      path: "{{ item.webroot }}"
+      state: directory
+      owner: "{{ websites_owner }}"
+      group: "{{ websites_group }}"
+      mode: "{{ websites_default_mode }}"
+    notify: restart nginx
+
+  - name: Copy website files
+    become: True
+    loop: "{{ websites|subelements('files_to_deploy', {'skip_missing': True}) }}"
+    copy:
+      content: "{{ lookup('file', item.1.src) }}"
+      dest: "{{ item.0.webroot }}/{{ item.1.dest }}"
+      owner: "{{ websites_owner }}"
+      group: "{{ websites_group }}"
+      mode: "{{ websites_default_file_mode }}"
+    notify: restart nginx
+
+  - name: Copy website nginx dropin
+    become: True
+    with_items: "{{ websites }}"
+    when: item.nginx_dropin is defined
+    copy:
+      content: "{{ lookup('file', item.nginx_dropin) }}"
+      dest: "/etc/nginx/{{ item.nginx_base }}.d/{{ item.nginx_dropin }}"
+      owner: "root"
+      group: "root"
+      mode: "0644"
+    notify: restart nginx
