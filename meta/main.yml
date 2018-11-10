@@ -1,7 +1,7 @@
 # Standards: 0.1
 galaxy_info:
   author: Maximilian Falkenstein
-  description: Create local users
+  description: Deploy simple static websites
   license: GPLv3
   min_ansible_version: 3.6
   platforms:
@@ -10,3 +10,4 @@ galaxy_info:
         - stretch
   galaxy_tags:
     - system
+    - nginx
